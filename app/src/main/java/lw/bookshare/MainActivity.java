@@ -88,7 +88,7 @@ private TextView existing_user_signin;
                         Toast.makeText(MainActivity.this,"SUCCESSFUL",Toast.LENGTH_SHORT).show();
                         }
                         if (!task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this,"Failled",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this,"Failed",Toast.LENGTH_SHORT).show();
                         }
 
                         // ...

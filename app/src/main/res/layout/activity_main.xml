@@ -22,7 +22,7 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
 
         <EditText
             android:id="@+id/email_New"
@@ -85,5 +85,17 @@
             app:layout_constraintTop_toBottomOf="@+id/Register_Button"
             tools:layout_constraintLeft_creator="1"
             app:layout_constraintLeft_toLeftOf="@+id/Register_Button" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="USER REGISTRATION"
+            android:textSize="24sp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout"
+            android:layout_marginTop="39dp" />
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>
