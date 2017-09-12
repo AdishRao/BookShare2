@@ -15,8 +15,5 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void displayMessage (View view){
-        TextView display = (TextView) findViewById(R.id.disp);
-        display.setText("Yeah sure listen to a button\n");
-    }
+
 }
