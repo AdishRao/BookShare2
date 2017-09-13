@@ -23,6 +23,7 @@ import static android.R.attr.start;
 import static lw.bookshare.R.id.Register_Button;
 import static lw.bookshare.R.id.existing_user_signin;
 
+
 public class Login_Page extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
     private Button signIn_Button;
@@ -78,7 +79,7 @@ public class Login_Page extends AppCompatActivity implements View.OnClickListene
                 return;
             }
 
-            progressDialog.setMessage("Registering");
+            progressDialog.setMessage("Log In");
             progressDialog.show();
 
             mAuth.signInWithEmailAndPassword(email, password)
@@ -88,6 +89,7 @@ public class Login_Page extends AppCompatActivity implements View.OnClickListene
                             if(task.isSuccessful())
                             {
                                 //START USER ACTIVITY
+                                Toast.makeText(Login_Page.this,"Login Successful",Toast.LENGTH_SHORT).show();
                             }
 
                             // If sign in fails, display a message to the user. If sign in succeeds

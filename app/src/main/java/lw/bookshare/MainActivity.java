@@ -1,6 +1,7 @@
 package lw.bookshare;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -90,7 +91,6 @@ private TextView existing_user_signin;
                         if (!task.isSuccessful()) {
                             Toast.makeText(MainActivity.this,"Failed",Toast.LENGTH_SHORT).show();
                         }
-
                         // ...
                     }
                 });
@@ -106,9 +106,9 @@ private TextView existing_user_signin;
            registerUser();
        }
        if(view==existing_user_signin) {
-           //to be filled
-
-       }
+             finish();
+               startActivity(new Intent(this, Login_Page.class));
+            }
     }
 
     @Override
