@@ -47,8 +47,11 @@ public class Login_Page extends AppCompatActivity implements View.OnClickListene
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    // User is signed in START ACTIVITY    CHECK THIS LINE OF CODE!!!
+                    // User is signed in START ACTIVITY (Home Page)
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), Home_Page.class));
+
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -88,9 +91,12 @@ public class Login_Page extends AppCompatActivity implements View.OnClickListene
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful())
                             {
-                                //START USER ACTIVITY
+                                //START Home page once user signs in
                                 Toast.makeText(Login_Page.this,"Login Successful",Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
+                                finish();
+                                startActivity(new Intent(getApplicationContext(), Home_Page.class));
+
                             }
 
                             // If sign in fails, display a message to the user. If sign in succeeds

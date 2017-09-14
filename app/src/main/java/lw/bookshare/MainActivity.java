@@ -43,8 +43,11 @@ private TextView existing_user_signin;
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    // User is signed in
+                    // User is signed in hence directly take to Home page
+                    finish();
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    startActivity(new Intent(getApplicationContext(), Home_Page.class));
+
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -88,6 +91,9 @@ private TextView existing_user_signin;
                         if(task.isSuccessful()){
                         Toast.makeText(MainActivity.this,"SUCCESSFUL",Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
+                            finish();
+                            //Open the Details page once user registers
+                            startActivity(new Intent(getApplicationContext(), Details_Page.class));
                         }
                         if (!task.isSuccessful()) {
                             Toast.makeText(MainActivity.this,"Failed",Toast.LENGTH_SHORT).show();
