@@ -90,6 +90,7 @@ public class Login_Page extends AppCompatActivity implements View.OnClickListene
                             {
                                 //START USER ACTIVITY
                                 Toast.makeText(Login_Page.this,"Login Successful",Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
 
                             // If sign in fails, display a message to the user. If sign in succeeds
@@ -98,6 +99,7 @@ public class Login_Page extends AppCompatActivity implements View.OnClickListene
                             if (!task.isSuccessful()) {
                                 Log.w(TAG, "signInWithEmail:failed", task.getException());
                                 Toast.makeText(Login_Page.this,"Failed",Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
 
                             // ...

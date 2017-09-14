@@ -87,9 +87,11 @@ private TextView existing_user_signin;
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                         Toast.makeText(MainActivity.this,"SUCCESSFUL",Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                         if (!task.isSuccessful()) {
                             Toast.makeText(MainActivity.this,"Failed",Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                         // ...
                     }
