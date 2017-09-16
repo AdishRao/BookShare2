@@ -27,8 +27,6 @@ public class Details_Page extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details__page);
         mAuth = FirebaseAuth.getInstance();
-        DatabaseReference myRef = databaseUsers.getReference("Users");
-
         getUsername =(EditText)findViewById(R.id.getUsername);
         getPhone =(EditText) findViewById(R.id.getPhone);
         getLoc = (Spinner) findViewById(R.id.getLoc);
@@ -48,7 +46,7 @@ public class Details_Page extends AppCompatActivity {
         String username =getUsername.getText().toString().trim();
         String phone = getPhone.getText().toString().trim();
         String location = getLoc.getSelectedItem().toString();
-        DatabaseReference myRef = databaseUsers.getReference("Users");
+        DatabaseReference myRef = databaseUsers.getReference();
 
 
         if(!TextUtils.isEmpty(username) && !TextUtils.isEmpty(phone))
