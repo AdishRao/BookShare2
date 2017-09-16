@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">BookShare</string>
+    <array name= "userLocation">
+        <item>Koramangala</item>
+        <item>JP Nagar</item>
+        <item>Kanakapura Road</item>
+        <item>E. City</item>
+    </array>
 </resources>

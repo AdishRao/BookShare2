@@ -50,7 +50,7 @@
         android:layout_marginStart="10dp" />
 
     <Button
-        android:id="@+id/buttonNext"
+        android:id="@+id/addDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Next"
@@ -87,11 +87,12 @@
         android:layout_marginStart="25dp" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/getLoc"
         android:layout_width="200dp"
         android:layout_height="28dp"
+        android:layout_marginLeft="38dp"
         android:layout_marginTop="55dp"
-        app:layout_constraintTop_toBottomOf="@+id/getPhone"
+        android:entries="@array/userLocation"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
-        android:layout_marginLeft="38dp" />
+        app:layout_constraintTop_toBottomOf="@+id/getPhone" />
 </android.support.constraint.ConstraintLayout>
