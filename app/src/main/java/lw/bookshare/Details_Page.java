@@ -1,5 +1,6 @@
 package lw.bookshare;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,7 +15,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Details_Page extends AppCompatActivity {
+import static lw.bookshare.R.id.Register_Button;
+import static lw.bookshare.R.id.signIn_Button;
+import static lw.bookshare.R.id.signUpText;
+
+public class Details_Page extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
     EditText getUsername;
@@ -32,21 +37,15 @@ public class Details_Page extends AppCompatActivity {
         getLoc = (Spinner) findViewById(R.id.getLoc);
 
 
+        addDetails.setOnClickListener(this);
 
-        addDetails.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                addUser();
-            }
-        });
+
     }
-
-
     private void addUser(){
         String username =getUsername.getText().toString().trim();
         String phone = getPhone.getText().toString().trim();
         String location = getLoc.getSelectedItem().toString();
-        DatabaseReference myRef = databaseUsers.getReference();
+        DatabaseReference myRef = databaseUsers.getReference("user");
 
 
         if(!TextUtils.isEmpty(username) && !TextUtils.isEmpty(phone))
@@ -61,6 +60,15 @@ public class Details_Page extends AppCompatActivity {
         else
         {
             Toast.makeText(this,"Fill in details", Toast.LENGTH_LONG).show();
+        }
+    }
+    @Override
+    public void onClick(View view){
+        if(view == addDetails)
+        {
+            addUser();
+            finish();
+            startActivity(new Intent(this, edit_Library.class));
         }
     }
 }
