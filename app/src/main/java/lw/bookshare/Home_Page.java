@@ -12,9 +12,8 @@ import com.google.firebase.auth.FirebaseUser;
 public class Home_Page extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
- Button btn_search;
-    Button btn_edit;
-
+    private Button btn_search;
+    private Button btn_edit;
     private Button buttonLogout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +43,7 @@ public class Home_Page extends AppCompatActivity implements View.OnClickListener
         if(view==btn_search)
         {
             finish();
-            startActivity(new Intent(this,edit_Library.class));
+            startActivity(new Intent(this,edit_Library.class)); //Change this part
         }
 
         if(view==btn_edit)
