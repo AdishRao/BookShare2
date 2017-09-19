@@ -51,9 +51,9 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
             FirebaseUser user = mAuth.getCurrentUser();
            String bid= myRef.push().getKey();
 
-            userBooksAdd books = new userBooksAdd(title, author);
+            userBooksAdd books = new userBooksAdd(title, author, "true");
             myRef.child(bid).setValue(books);
-            myRef.child(bid).child("Users").setValue(user.getUid());
+            myRef.child(bid).child("users").child("UID").setValue(user.getUid());
             Toast.makeText(this,"Added to library",Toast.LENGTH_LONG).show();
 
         }

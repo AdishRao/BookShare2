@@ -8,12 +8,14 @@ public class userBooksAdd {
 
     String title;
     String author;
+    String users;
     public userBooksAdd(){
     }
 
-    public userBooksAdd(String title, String author) {
+    public userBooksAdd(String title, String author, String users) {
         this.title = title;
         this.author = author;
+        this.users = users;
     }
 
     public String getTitle() {
@@ -22,6 +24,10 @@ public class userBooksAdd {
 
     public String getAuthor() {
         return author;
+    }
+
+    public String getUsers() {
+        return users;
     }
 }
 
