@@ -55,7 +55,6 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
             myRef.child(bid).setValue(books);
             myRef.child(bid).child("users").child("UID").setValue(user.getUid());
             Toast.makeText(this,"Added to library",Toast.LENGTH_LONG).show();
-
         }
 
 
