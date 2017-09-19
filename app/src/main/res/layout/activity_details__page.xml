@@ -79,8 +79,8 @@
         android:id="@+id/getLoc"
         android:layout_width="200dp"
         android:layout_height="28dp"
-        android:layout_marginLeft="38dp"
-        android:layout_marginTop="55dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginTop="59dp"
         android:entries="@array/userLocation"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/getPhone" />
