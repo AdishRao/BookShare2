@@ -11,9 +11,16 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.R.attr.author;
 import static lw.bookshare.R.id.buttonLogout;
 
 public class edit_Library extends AppCompatActivity implements View.OnClickListener {
@@ -24,6 +31,7 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
     EditText bauthor;
     private FirebaseAuth mAuth;
     FirebaseDatabase databaseAddbooks = FirebaseDatabase.getInstance();
+    String UserID;
 
 
     @Override
@@ -31,7 +39,8 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit__library);
             mAuth = FirebaseAuth.getInstance();
-            add_Book =(Button) findViewById(R.id.add_Book);
+        FirebaseUser user = mAuth.getCurrentUser();
+        add_Book =(Button) findViewById(R.id.add_Book);
             rmv_Book =(Button) findViewById(R.id.rmv_Book);
             view_Lib =(Button) findViewById(R.id.view_Lib);
             btitle =(EditText) findViewById(R.id.bTitle);
@@ -39,18 +48,31 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
             add_Book.setOnClickListener(this);
             rmv_Book.setOnClickListener(this);
             view_Lib.setOnClickListener(this);
+            UserID=user.getUid();
     }
 
     private void addBook() {
         String title =btitle.getText().toString().trim();
         String author= bauthor.getText().toString().trim();
+        DatabaseReference myRef = databaseAddbooks.getReference("Books");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //checkBooks(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(author))
         {
-            DatabaseReference myRef = databaseAddbooks.getReference("Books");
             FirebaseUser user = mAuth.getCurrentUser();
            String bid= myRef.push().getKey();
-
             userBooksAdd books = new userBooksAdd(title, author, "true");
             myRef.child(bid).setValue(books);
             myRef.child(bid).child("users").child("UID").setValue(user.getUid());
@@ -63,6 +85,23 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this,"Enter title and author",Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private void checkBooks(DataSnapshot dataSnapshot) {
+        DatabaseReference myRef = databaseAddbooks.getReference("Books");
+        String title =btitle.getText().toString().trim();
+        String author= bauthor.getText().toString().trim();
+        FirebaseUser user = mAuth.getCurrentUser();
+        for (DataSnapshot ds: dataSnapshot.getChildren() ){
+            existingBooks eBooks = new existingBooks();
+            eBooks.setAuthor(ds.child(ds.getKey()).getValue(existingBooks.class).getAuthor()); //Gets Author //or ref.get key? Ask Ruddha
+            eBooks.setAuthor(ds.child(ds.getKey()).getValue(existingBooks.class).getTitle()); //Gets Title
+            if(eBooks.getAuthor()==author && eBooks.getTitle()== title){
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("UID", user.getUid());
+                myRef.child(ds.getKey()).child("users").child("UID").updateChildren(childUpdates);
+            }
+        }
     }
 
     @Override
