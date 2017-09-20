@@ -48,18 +48,13 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
             add_Book.setOnClickListener(this);
             rmv_Book.setOnClickListener(this);
             view_Lib.setOnClickListener(this);
-            UserID=user.getUid();
-    }
 
-    private void addBook() {
-        String title =btitle.getText().toString().trim();
-        String author= bauthor.getText().toString().trim();
         DatabaseReference myRef = databaseAddbooks.getReference("Books");
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //checkBooks(dataSnapshot);
+                checkBooks(dataSnapshot);
             }
 
             @Override
@@ -68,11 +63,18 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+    }
+
+    private void addBook() {
+        String title =btitle.getText().toString().trim();
+        String author= bauthor.getText().toString().trim();
+        DatabaseReference myRef = databaseAddbooks.getReference("Books");
+
 
         if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(author))
         {
             FirebaseUser user = mAuth.getCurrentUser();
-           String bid= myRef.push().getKey();
+            String bid= myRef.push().getKey();
             userBooksAdd books = new userBooksAdd(title, author, "true");
             myRef.child(bid).setValue(books);
             myRef.child(bid).child("users").child("UID").setValue(user.getUid());
@@ -88,20 +90,27 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
     }
 
     private void checkBooks(DataSnapshot dataSnapshot) {
-        DatabaseReference myRef = databaseAddbooks.getReference("Books");
         String title =btitle.getText().toString().trim();
         String author= bauthor.getText().toString().trim();
         FirebaseUser user = mAuth.getCurrentUser();
         for (DataSnapshot ds: dataSnapshot.getChildren() ){
-            existingBooks eBooks = new existingBooks();
-            eBooks.setAuthor(ds.child(ds.getKey()).getValue(existingBooks.class).getAuthor()); //Gets Author //or ref.get key? Ask Ruddha
-            eBooks.setAuthor(ds.child(ds.getKey()).getValue(existingBooks.class).getTitle()); //Gets Title
-            if(eBooks.getAuthor()==author && eBooks.getTitle()== title){
-                Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put("UID", user.getUid());
-                myRef.child(ds.getKey()).child("users").child("UID").updateChildren(childUpdates);
-            }
+              existingBooks eBooks = new existingBooks();
+             String bid=ds.getKey();
+            eBooks.setAuthor(ds.child(bid).getValue(existingBooks.class).getAuthor()); //Gets Author
+             eBooks.setAuthor(ds.child(bid).getValue(existingBooks.class).getTitle()); //Gets Title
+             Toast.makeText(this,eBooks.getAuthor(),Toast.LENGTH_SHORT).show();
+             Toast.makeText(this,eBooks.getTitle(),Toast.LENGTH_SHORT).show();
+
+
+
+            // if(eBooks.getAuthor()==author && eBooks.getTitle()== title){
+               // Map<String, Object> childUpdates = new HashMap<>();
+                //childUpdates.put("UID", user.getUid());
+                //myRef.child(ds.getKey()).child("users").child("UID").updateChildren(childUpdates);
+           // }
+
         }
+
     }
 
     @Override
