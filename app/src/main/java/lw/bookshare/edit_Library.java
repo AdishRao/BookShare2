@@ -95,19 +95,19 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
         FirebaseUser user = mAuth.getCurrentUser();
         for (DataSnapshot ds: dataSnapshot.getChildren() ){
               existingBooks eBooks = new existingBooks();
-             String bid=ds.getKey();
-            eBooks.setAuthor(ds.child(bid).getValue(existingBooks.class).getAuthor()); //Gets Author
-             eBooks.setAuthor(ds.child(bid).getValue(existingBooks.class).getTitle()); //Gets Title
+            eBooks = ds.getValue(existingBooks.class);
+            eBooks.getTitle(); //Gets Title
+            eBooks.getAuthor();
              Toast.makeText(this,eBooks.getAuthor(),Toast.LENGTH_SHORT).show();
              Toast.makeText(this,eBooks.getTitle(),Toast.LENGTH_SHORT).show();
 
 
 
-            // if(eBooks.getAuthor()==author && eBooks.getTitle()== title){
-               // Map<String, Object> childUpdates = new HashMap<>();
-                //childUpdates.put("UID", user.getUid());
-                //myRef.child(ds.getKey()).child("users").child("UID").updateChildren(childUpdates);
-           // }
+            /*if(eBooks.getAuthor()==author && eBooks.getTitle()== title){
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("UID", user.getUid());
+                myRef.child(ds.getKey()).child("users").child("UID").updateChildren(childUpdates);
+            }*/
 
         }
 
