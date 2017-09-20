@@ -93,6 +93,7 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
         String title =btitle.getText().toString().trim();
         String author= bauthor.getText().toString().trim();
         FirebaseUser user = mAuth.getCurrentUser();
+        DatabaseReference myRef = databaseAddbooks.getReference("Books");
         for (DataSnapshot ds: dataSnapshot.getChildren() ){
               existingBooks eBooks = new existingBooks();
             eBooks = ds.getValue(existingBooks.class);
@@ -103,11 +104,11 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
 
 
 
-            /*if(eBooks.getAuthor()==author && eBooks.getTitle()== title){
+            if(eBooks.getAuthor()==author && eBooks.getTitle()== title){
                 Map<String, Object> childUpdates = new HashMap<>();
                 childUpdates.put("UID", user.getUid());
-                myRef.child(ds.getKey()).child("users").child("UID").updateChildren(childUpdates);
-            }*/
+                myRef.child(ds.getKey()).child("users").child("UID").updateChildren(childUpdates); //change code remove child(ds.getKey());
+            }
 
         }
 
