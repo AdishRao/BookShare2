@@ -31,26 +31,30 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
     EditText bauthor;
     private FirebaseAuth mAuth;
     FirebaseDatabase databaseAddbooks = FirebaseDatabase.getInstance();
-    String UserID;
+    String titlear[]= new String[100];
+    String authorar[]= new String[100];
+    String bidar[]= new String[100];
+    int i=0;
+    int f;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit__library);
-            mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        add_Book =(Button) findViewById(R.id.add_Book);
-            rmv_Book =(Button) findViewById(R.id.rmv_Book);
-            view_Lib =(Button) findViewById(R.id.view_Lib);
-            btitle =(EditText) findViewById(R.id.bTitle);
-            bauthor =(EditText) findViewById(R.id.bAuthor);
-            add_Book.setOnClickListener(this);
-            rmv_Book.setOnClickListener(this);
-            view_Lib.setOnClickListener(this);
+        add_Book = (Button) findViewById(R.id.add_Book);
+        rmv_Book = (Button) findViewById(R.id.rmv_Book);
+        view_Lib = (Button) findViewById(R.id.view_Lib);
+        btitle = (EditText) findViewById(R.id.bTitle);
+        bauthor = (EditText) findViewById(R.id.bAuthor);
+        add_Book.setOnClickListener(this);
+        rmv_Book.setOnClickListener(this);
+        view_Lib.setOnClickListener(this);
+
 
         DatabaseReference myRef = databaseAddbooks.getReference("Books");
-
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -66,53 +70,56 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
     }
 
     private void addBook() {
-        String title =btitle.getText().toString().trim();
-        String author= bauthor.getText().toString().trim();
+        String title = btitle.getText().toString().trim();
+        String author = bauthor.getText().toString().trim();
         DatabaseReference myRef = databaseAddbooks.getReference("Books");
-
-
-        if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(author))
-        {
-            FirebaseUser user = mAuth.getCurrentUser();
-            String bid= myRef.push().getKey();
-            userBooksAdd books = new userBooksAdd(title, author, "true");
-            myRef.child(bid).setValue(books);
-            myRef.child(bid).child("users").child("UID").setValue(user.getUid());
-            Toast.makeText(this,"Added to library",Toast.LENGTH_LONG).show();
+        FirebaseUser user = mAuth.getCurrentUser();
+        int found=0;
+        if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(author)) {
+            for(i=0;i<f;i++) {
+              //  Toast.makeText(this, titlear[i], Toast.LENGTH_SHORT).show();
+               // Toast.makeText(this, bidar[i], Toast.LENGTH_SHORT).show();
+                if(titlear[i].equals(title) && authorar[i].equals(author))
+                {   found=1;
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    childUpdates.put(user.getUid(), "True");
+                     myRef.child(bidar[i]).child("users").updateChildren(childUpdates);
+                    Toast.makeText(this, "Added to library", Toast.LENGTH_SHORT).show();
+                }
+            }
+            if(found==0){
+                String bid = myRef.push().getKey();
+                userBooksAdd books = new userBooksAdd(title, author, "true");
+                myRef.child(bid).setValue(books);
+                myRef.child(bid).child("users").child("UID").setValue(user.getUid());
+                Toast.makeText(this, "Added to library", Toast.LENGTH_LONG).show();
+            }
         }
 
-
-        else
-        {
-            Toast.makeText(this,"Enter title and author",Toast.LENGTH_LONG).show();
+        else {
+            Toast.makeText(this, "Enter title and author", Toast.LENGTH_LONG).show();
         }
 
     }
 
     private void checkBooks(DataSnapshot dataSnapshot) {
-        String title =btitle.getText().toString().trim();
-        String author= bauthor.getText().toString().trim();
-        FirebaseUser user = mAuth.getCurrentUser();
-        DatabaseReference myRef = databaseAddbooks.getReference("Books");
-        for (DataSnapshot ds: dataSnapshot.getChildren() ){
-              existingBooks eBooks = new existingBooks();
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            String bid=ds.getKey();
+            existingBooks eBooks = new existingBooks();
             eBooks = ds.getValue(existingBooks.class);
-            eBooks.getTitle(); //Gets Title
-            eBooks.getAuthor();
-             Toast.makeText(this,eBooks.getAuthor(),Toast.LENGTH_SHORT).show();
-             Toast.makeText(this,eBooks.getTitle(),Toast.LENGTH_SHORT).show();
-
-
-
-            if(eBooks.getAuthor()==author && eBooks.getTitle()== title){
-                Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put("UID", user.getUid());
-                myRef.child(ds.getKey()).child("users").child("UID").updateChildren(childUpdates); //change code remove child(ds.getKey());
-            }
-
+            titlear[i]=eBooks.getTitle(); //Gets Title
+            authorar[i]=eBooks.getAuthor(); //Gets Author
+            bidar[i]=bid;
+           // Toast.makeText(this, eBooks.getAuthor(), Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, titlear[i], Toast.LENGTH_SHORT).show();
+            i++;
+            f=i;
         }
 
     }
+
+
+
 
     @Override
     public void onClick(View view){
