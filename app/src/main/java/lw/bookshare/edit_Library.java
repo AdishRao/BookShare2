@@ -133,7 +133,7 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
         }
         if(view == view_Lib)
         {
-            // fill
+            startActivity(new Intent(this, displayUserBooks.class));
         }
     }
 }
