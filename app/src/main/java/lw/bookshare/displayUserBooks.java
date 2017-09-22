@@ -52,11 +52,13 @@ public class displayUserBooks extends AppCompatActivity {
 
     private void checkBooks(DataSnapshot dataSnapshot) {
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
-            String bid=ds.getKey();
+            String uid=ds.child("users").getKey();
+            mAuth = FirebaseAuth.getInstance();
+            FirebaseUser user = mAuth.getCurrentUser();
             existingBooks eBooks = new existingBooks();
             eBooks = ds.getValue(existingBooks.class);
-
-            existingBookses.add(eBooks);
+                if(user.getUid().equals(uid))
+                existingBookses.add(eBooks);
         }
 
         Booklist adapter = new Booklist(displayUserBooks.this,existingBookses);
