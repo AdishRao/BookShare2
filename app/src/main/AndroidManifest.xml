@@ -33,6 +33,7 @@
         <activity android:name=".edit_Library" />
         <activity android:name=".search_Page" />
         <activity android:name=".view_Lib" />
+        <activity android:name=".displayUserBooks"></activity>
     </application>
 
 </manifest>
