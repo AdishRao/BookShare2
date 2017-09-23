@@ -114,7 +114,7 @@ private TextView existing_user_signin;
            registerUser();
        }
        if(view==existing_user_signin) {
-             finish();
+              finish();
                startActivity(new Intent(this, Login_Page.class));
             }
     }

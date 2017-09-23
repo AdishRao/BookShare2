@@ -1,5 +1,6 @@
 package lw.bookshare;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -47,7 +48,6 @@ public class search_Page extends AppCompatActivity implements View.OnClickListen
         FirebaseUser user = mAuth.getCurrentUser();
         getUserbook = (EditText) findViewById(R.id.getBookname); ///
         search =(Button) findViewById(R.id.searchButton);
-
         listViewUsers = (ListView) findViewById(R.id.listuser);
         existingUserss = new ArrayList<>();
 
@@ -61,6 +61,10 @@ public class search_Page extends AppCompatActivity implements View.OnClickListen
         myRef.addValueEventListener(new ValueEventListener() {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 getBid(dataSnapshot);
+                if(found==1)
+                {
+                    getUid(dataSnapshot);
+                }
                 showUsers(dataSnapshot);
             }
 
@@ -72,37 +76,22 @@ public class search_Page extends AppCompatActivity implements View.OnClickListen
     }
 
     private void getBid(DataSnapshot dataSnapshot) {
-        String bookTitle =getUserbook.getText().toString().trim();
+        String bookTitle = getUserbook.getText().toString().trim();
 
-        for(DataSnapshot ds : dataSnapshot.child("Books").getChildren())
-        {
+        for (DataSnapshot ds : dataSnapshot.child("Books").getChildren()) {
             existingBooks eBooks = new existingBooks();
             eBooks = ds.getValue(existingBooks.class);
-            String title =eBooks.getTitle();
-            if(title.equals(bookTitle))
-            {
-                found =1;
-                Bid=ds.getKey();
-                DatabaseReference myRef1 = mFirebaseDatabase.getReference("Books");
-                myRef1.addValueEventListener(new ValueEventListener() {
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        getUid(dataSnapshot);
-                    }
-
-
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+            String title = eBooks.getTitle();
+            if (title.equals(bookTitle)) {
+                found = 1;
+                Bid = ds.getKey();
             }
-        }
 
+        }
     }
 
     private void getUid(DataSnapshot dataSnapshot) {
-        for(DataSnapshot ds: dataSnapshot.child(Bid).child("users").getChildren())
+        for(DataSnapshot ds: dataSnapshot.child("Books").child(Bid).child("users").getChildren())
         {
             uidss[i]=ds.getKey();
             i++;
@@ -120,29 +109,33 @@ public class search_Page extends AppCompatActivity implements View.OnClickListen
             FirebaseUser user = mAuth.getCurrentUser();
             existingUsers eBooks = new existingUsers();
             eBooks = ds.getValue(existingUsers.class);
-            if(found==0)
-            {
-                Toast.makeText(this,"Book Not Found",Toast.LENGTH_LONG).show();
-            }
             for(i=0;i<f;i++) {
                 if (ds.getKey().equals(uidss[i]))
                     existingUserss.add(eBooks);
             }
 
-        }
 
+        }
+        if(found==0) {
+            Toast.makeText(this, "Book Not Found", Toast.LENGTH_SHORT).show();
+        }
         searched_page adapter = new searched_page(search_Page.this,existingUserss);
         listViewUsers.setAdapter(adapter);
+        for(i=0;i<f;i++)
+        {
+            uidss[i]="";
+        }
         }
 
     @Override
     public void onClick(View view){
 
         if(view == search)
-        {
+        {   f=0;
+            existingUserss.clear();
+            listViewUsers.setAdapter(null);
             displayuser();
         }
-
     }
 }
 
