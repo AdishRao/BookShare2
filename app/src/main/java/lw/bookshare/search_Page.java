@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +31,10 @@ public class search_Page extends AppCompatActivity implements View.OnClickListen
     private EditText getUserbook;
     private Button search;
     private ListView mListView;
+    String Bid;
+    String uidss[] = new String[100];
+    int i=0,f;
+    int found=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +43,7 @@ public class search_Page extends AppCompatActivity implements View.OnClickListen
 
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        myRef = mFirebaseDatabase.getReference("user");
+        myRef = mFirebaseDatabase.getReference();
         FirebaseUser user = mAuth.getCurrentUser();
         getUserbook = (EditText) findViewById(R.id.getBookname); ///
         search =(Button) findViewById(R.id.searchButton);
@@ -51,10 +56,11 @@ public class search_Page extends AppCompatActivity implements View.OnClickListen
 
     }
 
+
     protected void displayuser() {
         myRef.addValueEventListener(new ValueEventListener() {
-            @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                getBid(dataSnapshot);
                 showUsers(dataSnapshot);
             }
 
@@ -65,14 +71,64 @@ public class search_Page extends AppCompatActivity implements View.OnClickListen
         });
     }
 
+    private void getBid(DataSnapshot dataSnapshot) {
+        String bookTitle =getUserbook.getText().toString().trim();
+
+        for(DataSnapshot ds : dataSnapshot.child("Books").getChildren())
+        {
+            existingBooks eBooks = new existingBooks();
+            eBooks = ds.getValue(existingBooks.class);
+            String title =eBooks.getTitle();
+            if(title.equals(bookTitle))
+            {
+                found =1;
+                Bid=ds.getKey();
+                DatabaseReference myRef1 = mFirebaseDatabase.getReference("Books");
+                myRef1.addValueEventListener(new ValueEventListener() {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        getUid(dataSnapshot);
+                    }
+
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
+
+    }
+
+    private void getUid(DataSnapshot dataSnapshot) {
+        for(DataSnapshot ds: dataSnapshot.child(Bid).child("users").getChildren())
+        {
+            uidss[i]=ds.getKey();
+            i++;
+            f=i;
+        }
+
+    }
+
+
     private void showUsers(DataSnapshot dataSnapshot) {
 
-        for(DataSnapshot ds : dataSnapshot.getChildren()){
+        for(DataSnapshot ds : dataSnapshot.child("user").getChildren()){
+            i=0;
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser user = mAuth.getCurrentUser();
             existingUsers eBooks = new existingUsers();
             eBooks = ds.getValue(existingUsers.class);
-            existingUserss.add(eBooks);
+            if(found==0)
+            {
+                Toast.makeText(this,"Book Not Found",Toast.LENGTH_LONG).show();
+            }
+            for(i=0;i<f;i++) {
+                if (ds.getKey().equals(uidss[i]))
+                    existingUserss.add(eBooks);
+            }
+
         }
 
         searched_page adapter = new searched_page(search_Page.this,existingUserss);
