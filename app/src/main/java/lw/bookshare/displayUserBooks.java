@@ -21,7 +21,9 @@ public class displayUserBooks extends AppCompatActivity {
     List<existingBooks> existingBookses;
     private FirebaseAuth mAuth;
     FirebaseDatabase databaseViewbooks = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = databaseViewbooks.getReference("Books");
+    DatabaseReference myRef = databaseViewbooks.getReference();
+    String bookids[] = new String[100];
+    int i=0,f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +36,16 @@ public class displayUserBooks extends AppCompatActivity {
 
 
     }
+
     @Override
     protected void onStart() {
         super.onStart();
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                getUserbooks(dataSnapshot);
                 checkBooks(dataSnapshot);
+
             }
 
             @Override
@@ -50,15 +55,27 @@ public class displayUserBooks extends AppCompatActivity {
         });
     }
 
+    private void getUserbooks(DataSnapshot dataSnapshot) {
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        for(DataSnapshot ds : dataSnapshot.child("user").child(user.getUid()).child("books").getChildren())
+        {
+            bookids[i]=ds.getKey();
+            i++;
+            f=i;
+        }
+    }
+
     private void checkBooks(DataSnapshot dataSnapshot) {
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-            String uid=ds.child("users").getKey();
+        for (DataSnapshot ds : dataSnapshot.child("Books").getChildren()) {
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser user = mAuth.getCurrentUser();
             existingBooks eBooks = new existingBooks();
-            eBooks = ds.getValue(existingBooks.class);
-                if(user.getUid().equals(uid))
-                existingBookses.add(eBooks);
+             eBooks = ds.getValue(existingBooks.class);
+             for(i=0;i<f;i++) {
+                 if(bookids[i].equals(ds.getKey()))
+                 existingBookses.add(eBooks);
+             }
         }
 
         Booklist adapter = new Booklist(displayUserBooks.this,existingBookses);

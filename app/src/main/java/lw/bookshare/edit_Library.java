@@ -73,6 +73,7 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
         String title = btitle.getText().toString().trim();
         String author = bauthor.getText().toString().trim();
         DatabaseReference myRef = databaseAddbooks.getReference("Books");
+        DatabaseReference myRef1 = databaseAddbooks.getReference("user");
         FirebaseUser user = mAuth.getCurrentUser();
         int found=0;
         if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(author)) {
@@ -85,6 +86,9 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
                     childUpdates.put(user.getUid(), "True");
                      myRef.child(bidar[i]).child("users").updateChildren(childUpdates);
                     Toast.makeText(this, "Added to library", Toast.LENGTH_SHORT).show();
+                    Map<String, Object> childUpdate1 = new HashMap<>();
+                    childUpdate1.put(bidar[i], "True");
+                    myRef1.child(user.getUid()).child("books").updateChildren(childUpdate1);
                 }
             }
             if(found==0){
@@ -92,6 +96,9 @@ public class edit_Library extends AppCompatActivity implements View.OnClickListe
                 userBooksAdd books = new userBooksAdd(title, author, "true");
                 myRef.child(bid).setValue(books);
                 myRef.child(bid).child("users").child(user.getUid()).setValue("true");
+                Map<String, Object> childUpdate1 = new HashMap<>();
+                childUpdate1.put(bid, "True");
+                myRef1.child(user.getUid()).child("books").updateChildren(childUpdate1);
                 Toast.makeText(this, "Added to library", Toast.LENGTH_LONG).show();
             }
         }
