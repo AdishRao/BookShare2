@@ -2,6 +2,9 @@ package lw.bookshare;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -15,7 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class search_Page extends AppCompatActivity {
+public class search_Page extends AppCompatActivity implements View.OnClickListener {
 
     ListView listViewUsers;
     List <existingUsers> existingUserss;
@@ -24,8 +27,8 @@ public class search_Page extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myRef;
-    private String userID;
-
+    private EditText getUserbook;
+    private Button search;
     private ListView mListView;
 
     @Override
@@ -37,17 +40,18 @@ public class search_Page extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference("user");
         FirebaseUser user = mAuth.getCurrentUser();
-        userID = user.getUid();
+        getUserbook = (EditText) findViewById(R.id.getBookname); ///
+        search =(Button) findViewById(R.id.searchButton);
 
         listViewUsers = (ListView) findViewById(R.id.listuser);
         existingUserss = new ArrayList<>();
 
+        search.setOnClickListener(this);
+
 
     }
-    @Override
-    protected void onStart() {
-        super.onStart();
 
+    protected void displayuser() {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -74,7 +78,17 @@ public class search_Page extends AppCompatActivity {
         searched_page adapter = new searched_page(search_Page.this,existingUserss);
         listViewUsers.setAdapter(adapter);
         }
+
+    @Override
+    public void onClick(View view){
+
+        if(view == search)
+        {
+            displayuser();
+        }
+
     }
+}
 
 
 
