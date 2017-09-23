@@ -39,7 +39,7 @@ public class search_Page extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
         userID = user.getUid();
 
-        listViewUsers = (ListView) findViewById(R.id.listViewUsers);
+        listViewUsers = (ListView) findViewById(R.id.listuser);
         existingUserss = new ArrayList<>();
 
 

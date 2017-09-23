@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,8 +44,8 @@ public class Home_Page extends AppCompatActivity implements View.OnClickListener
         }
         if(view==btn_search)
         {
-            finish();
-            startActivity(new Intent(this,edit_Library.class)); //Change this part
+
+            startActivity(new Intent(this,search_Page.class)); //Change this part
         }
 
         if(view==btn_edit)
